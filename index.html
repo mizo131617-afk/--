@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1220">
+<title>NEXORA | The Next Level of Shopping</title>
+<style>
+:root {
+  --navy: #0b1220;
+  --panel: #131e30;
+  --gold: #f2c66d;
+  --text: #f6f7fb;
+  --muted: #aab5c5;
+  --line: #29364a;
+  --green: #a9e8c1;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: #080e18; color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+header {
+  background: var(--navy); border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 10;
+}
+.topbar {
+  max-width: 1200px; margin: auto; padding: 17px 22px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.logo { font-size: 27px; font-weight: 900; letter-spacing: 3px; color: var(--gold); }
+.tag { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.search { flex: 1; min-width: 180px; display: flex; }
+.search input {
+  width: 100%; padding: 12px 14px; border-radius: 9px 0 0 9px;
+  border: 1px solid var(--line); background: #fff; color: #111;
+}
+.search button {
+  border: 0; padding: 0 17px; background: var(--gold);
+  border-radius: 0 9px 9px 0; font-weight: 800;
+}
+.cart-button, .outline {
+  border: 1px solid var(--line); background: transparent;
+  color: white; border-radius: 9px; padding: 11px 14px;
+}
+main { max-width: 1200px; margin: auto; padding: 25px 22px 50px; }
+.hero {
+  border: 1px solid #3c3c36; border-radius: 20px; padding: 44px;
+  background: radial-gradient(ellipse at 85% 20%, #4c3a1e 0%, transparent 36%),
+              linear-gradient(125deg, #18243a, #0c1321 65%);
+  display: flex; align-items: center; justify-content: space-between; gap: 25px;
+}
+.eyebrow { color: var(--gold); font-size: 12px; font-weight: 800; letter-spacing: 3px; }
+h1 { font-size: clamp(34px, 5vw, 58px); line-height: 1.04; margin: 13px 0; }
+.hero p { color: var(--muted); max-width: 520px; line-height: 1.7; }
+.hero-mark { color: #f2c66d; font-size: clamp(65px, 11vw, 120px); font-weight: 900; opacity: .9; }
+.primary {
+  border: 0; border-radius: 9px; padding: 12px 18px;
+  background: var(--gold); color: #17130a; font-weight: 800;
+}
+.section-head {
+  display: flex; align-items: end; justify-content: space-between;
+  gap: 15px; flex-wrap: wrap; margin: 35px 0 17px;
+}
+h2 { font-size: 23px; margin: 0 0 7px; }
+.sub { color: var(--muted); font-size: 13px; }
+.memberships { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.member {
+  border: 1px solid var(--line); border-radius: 14px; padding: 18px;
+  background: var(--panel); text-align: left; color: white;
+}
+.member.active { border: 2px solid var(--gold); padding: 17px; }
+.member strong { display: block; font-size: 18px; margin-bottom: 7px; }
+.member span { color: var(--muted); font-size: 13px; }
+.member b { color: var(--gold); font-size: 22px; display: block; margin-top: 10px; }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; }
+select {
+  background: var(--panel); color: white; border: 1px solid var(--line);
+  padding: 10px; border-radius: 8px;
+}
+layout-placeholder { display: none; }
+.shop-layout {
+  display: grid; grid-template-columns: 190px minmax(0, 1fr) 270px;
+  gap: 18px; align-items: start;
+}
+.sidebar, .cart, .product, .checkout {
+  border: 1px solid var(--line); border-radius: 13px; background: var(--panel);
+}
+.sidebar { padding: 15px; }
+.sidebar h3 { font-size: 14px; margin: 0 0 12px; }
+.category {
+  display: block; width: 100%; text-align: left; margin: 4px 0;
+  border: 0; background: transparent; color: var(--muted);
+  padding: 10px; border-radius: 7px;
+}
+.category.active, .category:hover { background: #25334a; color: var(--gold); }
+.products {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px;
+}
+.product { padding: 17px; display: flex; flex-direction: column; min-width: 0; }
+.product-icon {
+  height: 115px; display: grid; place-items: center; font-size: 55px;
+  background: linear-gradient(140deg, #202e44, #111a29);
+  border-radius: 9px; margin-bottom: 14px;
+}
+.pill {
+  display: inline-block; font-size: 10px; letter-spacing: 1px;
+  color: var(--gold); border: 1px solid #66532e; padding: 5px 7px;
+  border-radius: 5px; width: fit-content; margin-bottom: 9px;
+}
+.product h3 { margin: 0 0 8px; font-size: 16px; }
+.product p { color: var(--muted); font-size: 12px; line-height: 1.6; flex: 1; }
+.price { font-size: 21px; font-weight: 800; margin: 10px 0 13px; }
+.old { color: var(--muted); text-decoration: line-through; font-size: 13px; margin-left: 5px; }
+.product button { width: 100%; }
+.product button:disabled { cursor: not-allowed; opacity: .5; }
+.cart { padding: 16px; position: sticky; top: 105px; }
+.cart h2 { font-size: 19px; }
+.cart-row { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+.cart-row-top { display: flex; justify-content: space-between; gap: 8px; }
+.qty { display: flex; align-items: center; gap: 8px; margin-top: 9px; }
+.qty button { background: #25334a; color: white; border: 0; border-radius: 5px; padding: 4px 9px; }
+.totals { padding-top: 13px; }
+.total-row { display: flex; justify-content: space-between; margin: 9px 0; font-size: 13px; }
+.total-row.final { border-top: 1px solid var(--line); padding-top: 13px; font-size: 18px; font-weight: 800; }
+.gold-text { color: var(--gold); }
+.empty { color: var(--muted); font-size: 13px; line-height: 1.6; padding: 12px 0; }
+.note { font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 12px; }
+.checkout { padding: 22px; margin-top: 28px; }
+.checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 12px; color: var(--muted); }
+.field input, .field select {
+  width: 100%; padding: 12px; border-radius: 8px;
+  border: 1px solid var(--line); background: #0c1422; color: white;
+}
+.checkout-actions { margin-top: 17px; display: flex; gap: 10px; flex-wrap: wrap; }
+.hidden { display: none !important; }
+.status { margin-top: 13px; color: var(--green); font-size: 13px; line-height: 1.6; }
+footer { border-top: 1px solid var(--line); background: var(--navy); padding: 28px 22px; }
+.footer-inner {
+  max-width: 1200px; margin: auto; display: flex; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 12px;
+}
+footer strong { color: var(--gold); letter-spacing: 2px; }
+@media (max-width: 950px) {
+  .shop-layout { grid-template-columns: 160px minmax(0, 1fr); }
+  .cart { grid-column: 1 / -1; position: static; }
+}
+@media (max-width: 620px) {
+  .topbar { gap: 12px; padding: 14px; }
+  .search { order: 3; flex-basis: 100%; }
+  main { padding: 16px 13px 35px; }
+  .hero { padding: 27px 21px; }
+  .hero-mark { display: none; }
+  .memberships { grid-template-columns: 1fr; }
+  .shop-layout { grid-template-columns: 1fr; }
+  .sidebar { display: flex; flex-wrap: wrap; gap: 5px; }
+  .sidebar h3 { width: 100%; }
+  .category { width: auto; }
+  .products { grid-template-columns: 1fr 1fr; }
+  .product { padding: 11px; }
+  .product-icon { height: 85px; font-size: 39px; }
+  .checkout-grid { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div>
+      <div class="logo">NEXORA</div>
+      <div class="tag">THE NEXT LEVEL OF SHOPPING</div>
+    </div>
+    <form class="search" id="searchForm">
+      <input id="searchInput" placeholder="Search NEXORA products..." aria-label="Search products">
+      <button type="submit">Search</button>
+    </form>
+    <button class="cart-button" onclick="document.getElementById('cartPanel').scrollIntoView({behavior:'smooth'})">
+      🛒 Cart (<span id="cartCount">0</span>)
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">WELCOME TO NEXORA</div>
+      <h1>Small prices.<br>Big surprises.</h1>
+      <p>Discover sweet treats, clinic cards, exclusive passes and more — all in one place.</p>
+      <button class="primary" onclick="document.getElementById('shopTitle').scrollIntoView({behavior:'smooth'})">
+        Explore the shop →
+      </button>
+    </div>
+    <div class="hero-mark">N.</div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>Membership rewards</h2>
+        <div class="sub">Choose a membership to preview your eligible discount.</div>
+      </div>
+    </div>
+    <div class="memberships">
+      <button class="member" data-member="Bronze" onclick="setMember('Bronze')">
+        <strong>🥉 Bronze</strong><span>Great for getting started</span><b>5% OFF</b>
+      </button>
+      <button class="member" data-member="Silver" onclick="setMember('Silver')">
+        <strong>🥈 Silver</strong><span>More value on your shop</span><b>10% OFF</b>
+      </button>
+      <button class="member" data-member="Gold" onclick="setMember('Gold')">
+        <strong>🥇 Gold</strong><span>Our highest membership tier</span><b>20% OFF</b>
+      </button>
+    </div>
+    <p class="note">Membership selection is a preview in this demo. It does not issue or verify a real membership.</p>
+  </section>
+
+  <div class="section-head" id="shopTitle">
+    <div>
+      <h2>Shop all products</h2>
+      <div class="sub">Find your next favourite from NEXORA.</div>
+    </div>
+    <div class="toolbar">
+      <select id="sortSelect" aria-label="Sort products">
+        <option value="featured">Featured</option>
+        <option value="low">Price: low to high</option>
+        <option value="high">Price: high to low</option>
+        <option value="name">Name: A to Z</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="shop-layout">
+    <aside class="sidebar">
+      <h3>Categories</h3>
+      <button class="category active" data-category="All">All products</button>
+      <button class="category" data-category="Clinic Cards">Clinic Cards</button>
+      <button class="category" data-category="Sweet Boxes">Sweet Boxes</button>
+      <button class="category" data-category="Sweet Editions">Sweet Editions</button>
+      <button class="category" data-category="Elevator Passes">Elevator Passes</button>
+      <button class="category" data-category="VIP Pass">VIP Pass</button>
+    </aside>
+
+    <section>
+      <div class="products" id="products"></div>
+      <p class="note">Elevator plan prices and Sweet Edition prices must be added by the store owner before those products can be purchased.</p>
+    </section>
+
+    <aside class="cart" id="cartPanel">
+      <h2>🛒 Your cart</h2>
+      <div id="cartItems"><div class="empty">Your cart is empty. Add something you like!</div></div>
+      <div class="totals">
+        <div class="total-row"><span>Subtotal</span><strong id="subtotal">AED 0.00</strong></div>
+        <div class="total-row"><span id="discountLabel">Membership discount</span><strong id="discount">− AED 0.00</strong></div>
+        <div class="total-row final"><span>Total</span><span id="total">AED 0.00</span></div>
+      </div>
+      <button class="primary" style="width:100%;margin-top:10px" onclick="goCheckout()">Continue to checkout →</button>
+      <div class="note">VIP Pass has its own AED 315 promotional price and is excluded from membership discounts.</div>
+    </aside>
+  </div>
+
+  <section class="checkout hidden" id="checkout">
+    <div class="section-head" style="margin-top:0">
+      <div>
+        <h2>Checkout</h2>
+        <div class="sub">Review your order details before continuing.</div>
+      </div>
+    </div>
+    <form id="checkoutForm">
+      <div class="checkout-grid">
+        <div class="field">
+          <label for="customerName">Full name</label>
+          <input id="customerName" name="customerName" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="customerEmail">Email address</label>
+          <input id="customerEmail" name="customerEmail" type="email" autocomplete="email" required>
+        </div>
+        <div class="field full">
+          <label for="orderNotes">Order notes (optional)</label>
+          <input id="orderNotes" name="orderNotes" placeholder="Anything you need us to know?">
+        </div>
+      </div>
+      <p class="note">Demo checkout only: this version does not submit a real order or take payment. Do not enter payment card details here.</p>
+      <div class="checkout-actions">
+        <button type="submit" class="primary">Preview order</button>
+        <button type="button" class="outline" onclick="document.getElementById('checkout').classList.add('hidden')">Back to shop</button>
+      </div>
+      <div class="status" id="checkoutStatus" role="status"></div>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div><strong>NEXORA</strong><p>The next level of shopping.</p></div>
+    <div>Shop · Memberships · Cart · Checkout</div>
+    <div>Contact: add your official business contact here.</div>
+    <div>© <span id="year"></span> NEXORA</div>
+  </div>
+</footer>
+
+<script>
+const products = [
+  {
+    id: "clinic", name: "NEXORA Clinic Card", category: "Clinic Cards",
+    price: 5, icon: "🩺", label: "EVERYDAY ESSENTIAL",
+    description: "A NEXORA clinic card for your school-shop collection."
+  },
+  {
+    id: "mystery", name: "NEXORA Mystery Sweet Box", category: "Sweet Boxes",
+    price: 20, icon: "🍬", label: "BESTSELLER",
+    description: "A mystery box filled with sweet surprises."
+  },
+  {
+    id: "vip", name: "NEXORA VIP Pass", category: "VIP Pass",
+    price: 315, originalPrice: 350, icon: "👑", label: "SPECIAL OFFER",
+    description: "The VIP Pass, offered at 10% off its original AED 350 price."
+  },
+  {
+    id: "elevator2", name: "Elevator Pass — 2 Weeks", category: "Elevator Passes",
+    price: null, icon: "🛗", label: "2-WEEK PLAN",
+    description: "A separate elevator pass plan. Price to be announced."
+  },
+  {
+    id: "elevator1", name: "Elevator Pass — 1 Month", category: "Elevator Passes",
+    price: null, icon: "🏢", label: "1-MONTH PLAN",
+    description: "A separate elevator pass plan. Price to be announced."
+  },
+  {
+    id: "sweet-edition", name: "NEXORA Sweet Editions", category: "Sweet Editions",
+    price: null, icon: "🍭", label: "SWEET COLLECTION",
+    description: "Explore the NEXORA sweet collection. Prices coming soon."
+  }
+];
+
+let cart = {};
+let activeCategory = "All";
+let member = "None";
+let searchText = "";
+const rates = { None: 0, Bronze: 0.05, Silver: 0.10, Gold: 0.20 };
+const money = amount => "AED " + amount.toFixed(2);
+
+function setMember(name) {
+  member = member === name ? "None" : name;
+  document.querySelectorAll(".member").forEach(el => {
+    el.classList.toggle("active", el.dataset.member === member);
+  });
+  renderCart();
+}
+
+function renderProducts() {
+  let list = products.filter(p =>
+    (activeCategory === "All" || p.category === activeCategory) &&
+    (p.name + " " + p.category + " " + p.description).toLowerCase().includes(searchText)
+  );
+  const sort = document.getElementById("sortSelect").value;
+  if (sort === "low") list.sort((a,b) => (a.price ?? Infinity) - (b.price ?? Infinity));
+  if (sort === "high") list.sort((a,b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
+  if (sort === "name") list.sort((a,b) => a.name.localeCompare(b.name));
+
+  const host = document.getElementById("products");
+  if (!list.length) {
+    host.innerHTML = '<div class="empty">No products match your search.</div>';
+    return;
+  }
+  host.innerHTML = list.map(p => `
+    <article class="product">
+      <div class="product-icon" aria-hidden="true">${p.icon}</div>
+      <span class="pill">${p.label}</span>
+      <h3>${p.name}</h3>
+      <p>${p.description}</p>
+      <div class="price">${p.price === null ? "Coming soon" : money(p.price)}
+        ${p.originalPrice ? `<span class="old">${money(p.originalPrice)}</span>` : ""}
+      </div>
+      <button class="${p.price === null ? "outline" : "primary"}"
+        ${p.price === null ? "disabled" : `onclick="addToCart('${p.id}')"`}>
+        ${p.price === null ? "Not available yet" : "Add to cart"}
+      </button>
+    </article>
+  `).join("");
+}
+
+function addToCart(id) {
+  const p = products.find(item => item.id === id);
+  if (!p || p.price === null) return;
+  cart[id] = (cart[id] || 0) + 1;
+  renderCart();
+}
+
+function changeQty(id, change) {
+  cart[id] = (cart[id] || 0) + change;
+  if (cart[id] <= 0) delete cart[id];
+  renderCart();
+}
+
+function calculate() {
+  let subtotal = 0, discount = 0;
+  for (const [id, qty] of Object.entries(cart)) {
+    const p = products.find(item => item.id === id);
+    if (!p || p.price === null) continue;
+    subtotal += p.price * qty;
+    if (p.id !== "vip") discount += p.price * qty * (rates[member] || 0);
+  }
+  return { subtotal, discount, total: subtotal - discount };
+}
+
+function renderCart() {
+  const host = document.getElementById("cartItems");
+  const entries = Object.entries(cart).filter(([id, qty]) => qty > 0);
+  document.getElementById("cartCount").textContent =
+    entries.reduce((sum, [, qty]) => sum + qty, 0);
+
+  if (!entries.length) {
+    host.innerHTML = '<div class="empty">Your cart is empty. Add something you like!</div>';
+  } else {
+    host.innerHTML = entries.map(([id, qty]) => {
+      const p = products.find(item => item.id === id);
+      return `<div class="cart-row">
+        <div class="cart-row-top"><strong>${p.name}</strong><strong>${money(p.price * qty)}</strong></div>
+        <div class="qty">
+          <button aria-label="Decrease quantity" onclick="changeQty('${id}',-1)">−</button>
+          <span>${qty}</span>
+          <button aria-label="Increase quantity" onclick="changeQty('${id}',1)">+</button>
+          <button class="outline" style="padding:4px 7px;margin-left:auto"
+            onclick="changeQty('${id}',-${qty})">Remove</button>
+        </div>
+      </div>`;
+    }).join("");
+  }
+  const t = calculate();
+  document.getElementById("subtotal").textContent = money(t.subtotal);
+  document.getElementById("discount").textContent = "− " + money(t.discount);
+  document.getElementById("total").textContent = money(t.total);
+  document.getElementById("discountLabel").textContent =
+    member === "None" ? "Membership discount" : member + " discount";
+}
+
+function goCheckout() {
+  if (!Object.keys(cart).length) {
+    alert("Your cart is empty. Add a product before checkout.");
+    return;
+  }
+  const section = document.getElementById("checkout");
+  section.classList.remove("hidden");
+  section.scrollIntoView({ behavior: "smooth" });
+}
+
+document.querySelectorAll(".category").forEach(button => {
+  button.addEventListener("click", () => {
+    activeCategory = button.dataset.category;
+    document.querySelectorAll(".category").forEach(b =>
+      b.classList.toggle("active", b === button)
+    );
+    renderProducts();
+  });
+});
+
+document.getElementById("searchForm").addEventListener("submit", event => {
+  event.preventDefault();
+  searchText = document.getElementById("searchInput").value.trim().toLowerCase();
+  renderProducts();
+  document.getElementById("shopTitle").scrollIntoView({ behavior: "smooth" });
+});
+
+document.getElementById("searchInput").addEventListener("input", event => {
+  searchText = event.target.value.trim().toLowerCase();
+  renderProducts();
+});
+
+document.getElementById("sortSelect").addEventListener("change", renderProducts);
+
+document.getElementById("checkoutForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const t = calculate();
+  const name = document.getElementById("customerName").value.trim();
+  document.getElementById("checkoutStatus").textContent =
+    `Order preview for ${name}: ${money(t.total)}. This is a demo only — no order has been sent and no payment has been taken. A secure order and payment service must be connected before launch.`;
+});
+
+document.getElementById("year").textContent = new Date().getFullYear();
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
